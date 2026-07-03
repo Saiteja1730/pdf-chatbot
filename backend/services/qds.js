@@ -7,45 +7,60 @@ const client = new QdrantClient({
 
 const COLLECTION = "ragproject";
 
+// --------------------------------------------------
+// Create Payload Index
+// --------------------------------------------------
+
 const createPayloadIndexes = async () => {
 
     try {
 
         await client.createPayloadIndex(
-
             COLLECTION,
-
             {
-
                 field_name: "documentId",
-
                 field_schema: "keyword"
-
             }
-
         );
 
         console.log("✓ documentId payload index created");
 
+    } catch (err) {
+
+        const message =
+            err?.data?.status?.error ||
+            err?.message ||
+            "";
+
+        if (
+            message.toLowerCase().includes("already") ||
+            message.toLowerCase().includes("exists")
+        ) {
+
+            console.log("✓ documentId payload index already exists");
+
+        } else {
+
+            console.error("Qdrant Payload Index Error:");
+            console.error(err);
+
+            throw err;
+        }
     }
-
-    catch (err) {
-
-        console.log("Payload index already exists.");
-
-    }
-
 };
-async function uploadVectors(documents) {
+
+// --------------------------------------------------
+// Upload Vectors
+// --------------------------------------------------
+
+const uploadVectors = async (documents) => {
 
     const points = documents.map(doc => ({
 
         id: doc.id,
 
         vector: {
-
             embedding: doc.embedding
-
         },
 
         payload: {
@@ -80,41 +95,73 @@ async function uploadVectors(documents) {
 
     });
 
-}
+};
 
-async function searchVectors(embedding, documentIds = null) {
+// --------------------------------------------------
+// Search Vectors
+// --------------------------------------------------
+
+const searchVectors = async (embedding, documentIds = null) => {
+
     const options = {
+
         vector: {
+
             name: "embedding",
+
             vector: embedding
+
         },
+
         limit: 20,
+
         with_payload: true,
+
         with_vector: false
+
     };
 
     if (documentIds) {
-        // Normalize to array
-        const ids = Array.isArray(documentIds) ? documentIds : [documentIds];
-        
+
+        const ids = Array.isArray(documentIds)
+            ? documentIds
+            : [documentIds];
+
         if (ids.length > 0) {
+
             options.filter = {
+
                 must: [
+
                     {
+
                         key: "documentId",
+
                         match: {
+
                             any: ids
+
                         }
+
                     }
+
                 ]
+
             };
+
         }
+
     }
 
     return await client.search(COLLECTION, options);
-}
 
-async function deleteDocument(documentId) {
+};
+
+// --------------------------------------------------
+// Delete Document
+// --------------------------------------------------
+
+const deleteDocument = async (documentId) => {
 
     await client.delete(COLLECTION, {
 
@@ -142,7 +189,7 @@ async function deleteDocument(documentId) {
 
     });
 
-}
+};
 
 module.exports = {
 
