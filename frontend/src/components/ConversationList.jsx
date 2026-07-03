@@ -44,8 +44,8 @@ export const ConversationList = () => {
   }
 
   return (
-    <div className="flex-1 overflow-y-auto custom-scrollbar pb-4">
-      <h3 className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-3 px-4 mt-4">
+    <div className="pb-4">
+      <h3 className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-3 px-4 mt-2">
         Recent Chats
       </h3>
       {conversations.length === 0 ? (

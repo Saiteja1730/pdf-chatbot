@@ -28,9 +28,9 @@ export const Sidebar = ({ onCloseMobile }) => {
         <Upload />
       </div>
       
-      <div className="flex-1 flex flex-col overflow-hidden px-2">
+      <div className="flex-1 overflow-y-auto custom-scrollbar px-2 pb-4">
         <DocumentList />
-        <div className="my-2 border-t border-gray-800 mx-2" />
+        <div className="my-4 border-t border-gray-800 mx-4" />
         <ConversationList />
       </div>
     </div>
