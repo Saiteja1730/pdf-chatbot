@@ -7,9 +7,15 @@
     "start": "node server.js",
     "dev": "node --watch server.js"
   },
-  "keywords": [],
+  "keywords": [
+    "rag",
+    "pdf",
+    "gemini",
+    "qdrant",
+    "mongodb"
+  ],
   "author": "Saiteja",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "@google/generative-ai": "^0.24.1",
     "@qdrant/js-client-rest": "^1.18.0",
